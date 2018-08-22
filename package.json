@@ -1,0 +1,26 @@
+{
+  "name": "cucumber-json-reporter-to-html",
+  "version": "1.0.0",
+  "description": "the simpliest and the agliest cucumber html reporter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html.git"
+  },
+  "keywords": [
+    "cucumber",
+    "reporter",
+    "cucumber-reporter",
+    "html-reporter",
+    "html"
+  ],
+  "author": "Dzmitry_Karneyenka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/issues"
+  },
+  "homepage": "https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html#readme"
+}
