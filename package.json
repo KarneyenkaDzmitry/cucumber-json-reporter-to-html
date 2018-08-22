@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/issues"
   },
-  "homepage": "https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html#readme"
+  "homepage": "https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html#readme",
+  "dependencies": {
+    "yargs": "^12.0.1"
+  }
 }

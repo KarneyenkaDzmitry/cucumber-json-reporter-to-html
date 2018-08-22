@@ -269,4 +269,17 @@ pre {
 
 .label-skipped {
     background-color: yellow;
+    color: blue;
+}
+
+.label-failed {
+    background-color: crimson;
+}
+
+.label-passed {
+    background-color: green;
+}
+
+body {
+    background-color: rgb(0, 225, 255);
 }
