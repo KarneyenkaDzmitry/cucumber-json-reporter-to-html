@@ -6,7 +6,7 @@
 resources/
 logs/
 reports/
-screenshot/
+screenshots/
 test/
 report.json
 report.html

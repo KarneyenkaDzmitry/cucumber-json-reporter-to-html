@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+var _ = require('lodash');
 function getReportHeader(reportJson, pathToCss, title, description) {
     return `<!DOCTYPE html><html>
 <head>
@@ -17,7 +18,7 @@ function getReportHeader(reportJson, pathToCss, title, description) {
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand">cucumber-json-reporter-to-html</a>
-            <div class="project-name visible-md visible-lg">${title}}</div>
+            <div class="project-name visible-md visible-lg">${title}</div>
             <div class="label-container">
                 <span class="label label-success" title=scenarios>Passed: ${getResult(reportJson, 'passed')}</span>
                 <span class="label label-danger" title=scenarios>Failed: ${getResult(reportJson, 'failed')}</span>
@@ -26,7 +27,7 @@ function getReportHeader(reportJson, pathToCss, title, description) {
         </div>
     </div>
 </div>
-<div class="container">${description===undefined? '':description}</div>`;
+<div class="container">${description === undefined ? '' : description}</div>`;
 }
 
 const reportEnd = `<div> &nbsp<br> &nbsp </div>
@@ -70,6 +71,16 @@ function getStepColor(step) {
     return cssClass;
 }
 
+function getScenarioTime(steps) {
+    let result = 0;
+    steps.forEach((step) => {
+        if (step.result.status !== 'skipped' && step.keyword !== 'After') {
+            result += step.result.duration;
+        }
+    });
+    return result;
+}
+
 function generateScenarioHtml(scenarioArray, reportStoreHtml) {
     let scenarioHtml = '';
     scenarioArray.forEach((scenario) => {
@@ -77,7 +88,7 @@ function generateScenarioHtml(scenarioArray, reportStoreHtml) {
         <div class="scenario ${getScenarioStatus(scenario.steps)}">
         <div>
             <strong>${scenario.name}</strong>
-            <div style="text-align:right;">total time</div>
+            <div style="text-align:right;">${getScenarioTime(scenario.steps)} nanosec</div>
         ${generateStepsHtml(scenario.steps, scenario.name, reportStoreHtml)}</div></div>`;
     });
     return scenarioHtml;
@@ -87,7 +98,7 @@ function generateStepsHtml(stepsArray, scenarioName, reportStoreHtml) {
     let stepsHtml = '';
     stepsArray.forEach((step) => {
         if (step.keyword !== 'After') {
-            stepsHtml = stepsHtml + `<div class="steps ${getStepColor(step)}">${step.name}<div style="text-align:right;">total time1</div></div>`
+            stepsHtml = stepsHtml + `<div class="steps ${getStepColor(step)}">${step.name}<div style="text-align:right;">${step.result.duration!==undefined ? step.result.duration + ' nanosec': 'no time'} </div></div>`
         }
         else {
             if (step.embeddings !== undefined) {
@@ -136,7 +147,7 @@ function createReport(pathToReport, reportStoreHtml, title, description) {
     fs.writeFileSync(reportStoreHtml, finalHtml.toString(), 'utf8');
 }
 
-function getPathToCss(reportStoreHtml){
+function getPathToCss(reportStoreHtml) {
     return path.relative(path.dirname(reportStoreHtml), './css/custom.css');
 }
 
