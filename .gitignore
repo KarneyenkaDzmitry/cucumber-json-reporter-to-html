@@ -6,6 +6,10 @@
 resources/
 logs/
 reports/
+screenshot/
+test/
+report.json
+report.html
 *.exe
 *.bat
 *.jar
