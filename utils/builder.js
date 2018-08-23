@@ -55,6 +55,21 @@ function getResult(reportJson, status) {
     return result;
 }
 
+var calculateDuration = function(duration) {
+    var oneNanoSecond = 1000000000;
+    var oneMinute = 60 * oneNanoSecond;
+    duration = parseInt(duration);
+    function format(min, sec) {
+        sec =  sec + 's';
+        return min > 0 ? min + 'm ' + sec : sec;
+    }
+    if (!isNaN(duration)) {
+        var min = _.floor(duration / oneMinute);
+        var sec = _.round((duration % oneMinute) / oneNanoSecond);
+        return format(min, sec);
+    }
+};
+
 function getStepColor(step) {
     let cssClass;
     switch (step.result.status) {
@@ -78,7 +93,7 @@ function getScenarioTime(steps) {
             result += step.result.duration;
         }
     });
-    return result;
+    return result/1000;
 }
 
 function generateScenarioHtml(scenarioArray, reportStoreHtml) {
@@ -87,8 +102,8 @@ function generateScenarioHtml(scenarioArray, reportStoreHtml) {
         scenarioHtml = scenarioHtml + `
         <div class="scenario ${getScenarioStatus(scenario.steps)}">
         <div>
-            <strong>${scenario.name}</strong>
-            <div style="text-align:right;">${getScenarioTime(scenario.steps)} nanosec</div>
+            <strong>Scenario: </strong>${scenario.name}
+            <div style="text-align:right;">${getScenarioTime(scenario.steps)} ms</div>
         ${generateStepsHtml(scenario.steps, scenario.name, reportStoreHtml)}</div></div>`;
     });
     return scenarioHtml;
@@ -98,7 +113,7 @@ function generateStepsHtml(stepsArray, scenarioName, reportStoreHtml) {
     let stepsHtml = '';
     stepsArray.forEach((step) => {
         if (step.keyword !== 'After') {
-            stepsHtml = stepsHtml + `<div class="steps ${getStepColor(step)}">${step.name}<div style="text-align:right;">${step.result.duration!==undefined ? step.result.duration + ' nanosec': 'no time'} </div></div>`
+            stepsHtml = stepsHtml + `<div class="steps ${getStepColor(step)}"><strong>${step.keyword} </strong>${step.name}<div style="text-align:right;">${step.result.duration!==undefined ? step.result.duration/1000 + ' ms': 'skipped'} </div></div>`
         }
         else {
             if (step.embeddings !== undefined) {
@@ -118,7 +133,7 @@ function generateHtmlForFeature(jsonData, reportStoreHtml) {
     let featureIndex = 0;
     jsonData.forEach((feature) => {
         reportFillingHtml = reportFillingHtml + `<div class="container">
-        <h3 class="all-features ${getFeatureStatus(feature.elements)}">${feature.name}</h3>
+        <h3 class="all-features ${getFeatureStatus(feature.elements)}"><strong>Feature: </strong>${feature.name}</h3>
         <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#feature${featureIndex}">more details</button>
         <div id="feature${featureIndex}" class="collapse">${generateScenarioHtml(feature.elements, reportStoreHtml)}</div></div></div>`
         featureIndex++;
