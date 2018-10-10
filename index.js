@@ -1,6 +1,8 @@
 'use strict';
-const builder = require('./utils/builder');
+
+const builder = require('./utils/helper');
 let titleOfReport, descriptionOfReport;
+
 function create( source, dest, title, description ) {
     if (typeof (source) !== 'string') return new Error('variable [source] have to be a string')
     if (typeof (dest) !== 'string') return new Error('variable [dest] have to be a string')

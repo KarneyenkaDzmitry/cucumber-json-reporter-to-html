@@ -252,11 +252,15 @@ pre {
     border: 1px solid black;
 }
 
-.steps {
-    padding-left: 20px;
-    padding-right: 15px;
-    margin-bottom: 4px;
-    border: 1px solid rgb(76, 99, 175);
+.steps.label-success {
+    padding-left: 25px;
+    margin-bottom: 0px;
+    background-color: rgb(143, 201, 143)
+}
+.steps.label-danger {
+    padding-left: 25px;
+    margin-bottom: 0px;
+    background-color: rgb(245, 104, 104)
 }
 
 .all-features {
@@ -281,5 +285,11 @@ pre {
 }
 
 body {
-    background-color: rgb(0, 225, 255);
+    background-color: rgb(243, 240, 233)
+}
+.date {
+    text-align: left;
+    color: rgb(158, 150, 150);
+    margin-left: 10px;
+    margin-top: -5px
 }
