@@ -78,7 +78,7 @@
     font-weight: bold;
 }
 .screenshot {
-    padding: 2% 0 2% 0;
+    text-align:right;
 }
 .duration {
     text-align:right;

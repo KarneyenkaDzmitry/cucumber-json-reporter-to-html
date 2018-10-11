@@ -7,8 +7,8 @@ function getHead(pathToCss, title) {
     return (blank.head.join('\n').replace('#title', title)).replace('#cssPath', pathToCss);
 }
 
-async function getBody(reportJson, title, description) {
-    return await getHeader(reportJson, title) + await getMain(reportJson, description) + await getFooter()
+async function getBody(reportJson, title, description, reportPath) {
+    return await getHeader(reportJson, title) + await getMain(reportJson, description, reportPath) + await getFooter()
 }
 
 async function getHeader(reportJson, title) {
@@ -19,9 +19,9 @@ async function getHeader(reportJson, title) {
     header = header.replace(/#failedAmount/, statistics['failed']);
     return header.replace(/#skippedAmount/, statistics['skipped']);
 }
-async function getMain(reportJson, description) {
+async function getMain(reportJson, description, reportPath) {
     let main = blank.body.main.join('\n');
-    const lists = await getFeaturesLists(reportJson);
+    const lists = await getFeaturesLists(reportJson, reportPath);
     main = main.replace(/#description/, description);
     main = main.replace(/#allFeaturesList/, lists['all'].join('\n'));
     main = main.replace(/#passedFeaturesList/, lists['passed'].join('\n'));
@@ -32,8 +32,8 @@ function getFooter() {
     return blank.body.footer.join('\n').replace(/#date/, new Date());
 }
 
-async function getReport(reportJson, pathToCss, title, description) {
-    return (blank.html.replace('#head', await getHead(pathToCss, title))).replace('#body', await getBody(reportJson, title, description));
+async function getReport(reportJson, pathToCss, title, description, reportPath) {
+    return (blank.html.replace('#head', await getHead(pathToCss, title))).replace('#body', await getBody(reportJson, title, description, reportPath));
 }
 
 module.exports = { getReport }

@@ -1,9 +1,11 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const _ = require('lodash');
 const content = require('../data/content.data.json');
 
-let calculateDuration = function (duration) {
+const calculateDuration = function (duration) {
     var oneNanoSecond = 1000000000;
     var oneMinute = 60 * oneNanoSecond;
     duration = parseInt(duration);
@@ -100,32 +102,38 @@ function getResults(reportJson) {
     return statistics;
 }
 
-function getStepsList(data) {
+function getStepsList(data, reportPath) {
+    let failedStep = {};
     let steps = [];
     data.forEach(step => {
         const stepStatus = getStepStatus(step);
-        const stepKeyword = step.keyword;
         const stepName = step.name;
-        const stepTime = step.result.duration === undefined ? '0s' : calculateDuration(step.result.duration);
+        if (stepStatus === 'label-danger') {
+            failedStep.name = stepName;
+            failedStep.index = steps.length;
+        }
+        const stepKeyword = step.keyword;
+        const stepTime = step.result.duration === undefined ? '0 s' : calculateDuration(step.result.duration);
         if (stepKeyword !== 'After') {
             steps.push(fillTemplate('step', stepStatus, stepName, stepTime, stepKeyword));
         } else {
             if (step.embeddings !== undefined) {
                 let image = new Buffer.from(step.embeddings[0].data, 'base64');
                 fs.existsSync('screenshots') || fs.mkdirSync('screenshots');
-                let screenshotPath = './screenshots/' + scenarioName.replace(/\s/g, '') + '.png';
+                let screenshotPath = path.resolve(path.dirname(reportPath)) + '/screenshots/' + failedStep.name.replace(/\s/g, '') + '.png';
                 fs.writeFileSync(screenshotPath, image, 'base64');
-                stepsHtml = stepsHtml + `<img src='${path.relative(path.dirname(reportStoreHtml), screenshotPath)}'>`;
+                steps[failedStep.index]=steps[failedStep.index].replace('<!---->', `<a href=\"${screenshotPath}\" alt=\"${failedStep.name}\" title=\"${failedStep.name}\" target=\"_blank\">screen</a>`);
             }
         }
+
     });
     return steps.join('\n');
 }
 
-function getScenariosList(data, listName) {
+function getScenariosList(data, listName, reportPath) {
     let scenarios = [];
     data.forEach((scenario, index) => {
-        const stepsList = getStepsList(scenario.steps);
+        const stepsList = getStepsList(scenario.steps, reportPath);
         const scenarioStatus = getScenarioStatus(scenario.steps);
         const scenarioName = scenario.name;
         const scenarioTime = calculateDuration(getScenarioTime(scenario.steps));
@@ -135,7 +143,7 @@ function getScenariosList(data, listName) {
     return scenarios.join('\n');
 }
 
-function getFeaturesLists(jsonData) {
+function getFeaturesLists(jsonData, reportPath) {
     const features = { all: [], passed: [], failed: [] };
     jsonData.forEach((feature) => {
         const featureStatus = getFeatureStatus(feature.elements);
@@ -147,14 +155,14 @@ function getFeaturesLists(jsonData) {
             failed: `featureFailed${features.failed.length}`
         };
         features.all.push(fillTemplate(
-            'feature', featureStatus, featureName, featureTime, featureID.all, getScenariosList(feature.elements, `All${featureID.all}`)));
+            'feature', featureStatus, featureName, featureTime, featureID.all, getScenariosList(feature.elements, `All${featureID.all}`, reportPath)));
         if (featureStatus === 'label-danger') {
             features.failed.push(
-                fillTemplate('feature', featureStatus, featureName, featureTime, featureID.failed, getScenariosList(feature.elements, `Failed${featureID.all}`)));
+                fillTemplate('feature', featureStatus, featureName, featureTime, featureID.failed, getScenariosList(feature.elements, `Failed${featureID.all}`, reportPath)));
         }
         if (featureStatus === 'label-success') {
             features.passed.push(
-                fillTemplate('feature', featureStatus, featureName, featureTime, featureID.passed, getScenariosList(feature.elements, `Passed${featureID.all}`)));
+                fillTemplate('feature', featureStatus, featureName, featureTime, featureID.passed, getScenariosList(feature.elements, `Passed${featureID.all}`, reportPath)));
         }
     });
     return features;
