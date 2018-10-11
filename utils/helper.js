@@ -119,7 +119,7 @@ function getStepsList(data, reportPath) {
         } else {
             if (step.embeddings !== undefined) {
                 let image = new Buffer.from(step.embeddings[0].data, 'base64');
-                fs.existsSync('screenshots') || fs.mkdirSync('screenshots');
+                fs.existsSync(path.resolve(path.dirname(reportPath))+'/screenshots') || fs.mkdirSync(path.resolve(path.dirname(reportPath))+'/screenshots');
                 let screenshotPath = path.resolve(path.dirname(reportPath)) + '/screenshots/' + failedStep.name.replace(/\s/g, '') + '.png';
                 fs.writeFileSync(screenshotPath, image, 'base64');
                 steps[failedStep.index]=steps[failedStep.index].replace('<!---->', `<a href=\"${screenshotPath}\" alt=\"${failedStep.name}\" title=\"${failedStep.name}\" target=\"_blank\">screen</a>`);

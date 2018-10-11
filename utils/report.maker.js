@@ -7,7 +7,7 @@ const {getReport} = require('./report.generator.js');
 
 async function createReport(pathToReport, reportStoreHtml, title, description) {
     const reportJson = JSON.parse(fs.readFileSync(pathToReport));
-    const pathToCss = path.relative(path.dirname(reportStoreHtml), './css/custom.css');
+    const pathToCss = path.resolve(path.resolve(path.dirname(reportStoreHtml)), '../css/custom.css');
     const html =await getReport(reportJson, pathToCss, title, description, reportStoreHtml);
     fs.writeFileSync(reportStoreHtml, html.toString(), 'utf8');
 }
