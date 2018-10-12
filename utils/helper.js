@@ -5,6 +5,14 @@ const path = require('path');
 const _ = require('lodash');
 const content = require('../data/content.data.json');
 
+function replacer(string, object, flags) {
+    Object.keys(object).forEach(key => {
+        const regex = new RegExp(key, flags)
+        string = string.replace(regex, object[key]);
+    });
+    return string;
+}
+
 const calculateDuration = function (duration) {
     var oneNanoSecond = 1000000000;
     var oneMinute = 60 * oneNanoSecond;
@@ -71,18 +79,15 @@ function getScenarioStatus(steps) {
 }
 
 function fillTemplate(marker, status, name, time, Id, scenarios) {
-    let instance = content[marker].join('\n');
-    instance = instance.replace(`#${marker}Status`, status);
-    instance = instance.replace(`#${marker}Name`, name);
-    instance = instance.replace(`#${marker}Time`, time);
-    instance = instance.replace(`#${marker}Status`, status);
-    instance = instance.replace(/#scenariosList/, scenarios);
-    instance = instance.replace(/#allSteps/, scenarios);
-    switch (marker) {
-        case 'feature': case 'scenario': instance = (instance.replace(`#${marker}ID`, Id)).replace(`#${marker}ID`, Id); break;
-        case 'step': instance = instance.replace(`#${marker}Key`, Id); break;
-    }
-    return instance;
+    const marks = {};
+    marks[`#${marker}Status`] = status;
+    marks[`#${marker}Name`] = name; 
+    marks[`#${marker}Time`] = time;
+    marks[`#${marker}ID`] = Id;
+    marks[`#${marker}Key`] =  Id;
+    marks['#scenariosList'] = scenarios;
+    marks['#allSteps'] = scenarios;
+    return replacer(content[marker].join('\n'), marks, 'gi');
 }
 
 function getResults(reportJson) {
@@ -168,4 +173,4 @@ function getFeaturesLists(jsonData, reportPath) {
     return features;
 }
 
-module.exports = { getResults, getFeaturesLists }
+module.exports = { getResults, getFeaturesLists, replacer }

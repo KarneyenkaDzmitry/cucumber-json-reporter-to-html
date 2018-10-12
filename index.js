@@ -11,7 +11,7 @@ function create( source, dest, title, description ) {
     if ((typeof (source) !== 'undefined') && (typeof (dest) !== 'undefined')) {
         createReport(source, dest, titleOfReport, descriptionOfReport);
     } else {
-        return new Error('The parameters [source] and [dest] are supposed to be sent');
+        throw new Error('The parameters [source] and [dest] are supposed to be sent');
     }
 };
 
