@@ -13,7 +13,6 @@ report.html
 *.exe
 *.bat
 *.jar
-README.md
 # There are dependencies from github template for JavaScript
 # Dependency directories
 node_modules/
