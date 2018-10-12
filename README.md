@@ -31,17 +31,19 @@ There application has only one dependency: "lodash": "^4.17.10"
 ## Structure 
 ### Folders:
 
-- [css] - there are all styles that needed for making html report prettier;
-- [node_modules] - will be created after [npm install] command. There will be stored all additional modules;
-- [data] - containes data for creating html page;
-- [utils] - contains main files with methods that create a report.
+- [css]() - there are all styles that needed for making html report prettier;
+- [node_modules]() - will be created after [npm install] command. There will be stored all additional modules;
+- [data]() - containes data for creating html page;
+- [utils]() - contains main files with methods that create a report.
 
 ### Files in root:
 
 - [index.js]() - main file in which you can find our Calculator class;
 - [.eslintrc.js]() - all rulles for [eslint] are placed there;
 - [.gitignore]() -  all folders and files that should not be indexed by [git] are listed here;
-- [package.json]() - includes all data for [npm]
+- [package.json]() - includes all data for [npm];
+- [Screenshot-description.png]() - png file with descriptions of the options a reporter;
+- [LICENSE]() - license MIT;
 - [README.md]() - readme file with special information about the application and git-syntacs. 
 
 ### Author
