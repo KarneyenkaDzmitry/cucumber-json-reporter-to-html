@@ -1,11 +1,9 @@
 {
   "name": "cucumber-json-reporter-to-html",
   "version": "1.0.0",
-  "description": "the simpliest and the agliest cucumber html reporter",
+  "description": "the simpliest cucumber html reporter",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html.git"
@@ -24,8 +22,6 @@
   },
   "homepage": "https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html#readme",
   "dependencies": {
-    "bootstrap": "^4.1.3",
-    "lodash": "^4.17.10",
-    "yargs": "^12.0.1"
+    "lodash": "^4.17.10"
   }
 }
