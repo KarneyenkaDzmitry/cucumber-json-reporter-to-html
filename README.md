@@ -3,6 +3,7 @@
 ### Description 
 The application helps to convert cucumber.json reporter into pretty html view.<br>
 A html reporter will have anougth information for analize tests<br>
+<img weight = "700" src="https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/Screenshot-description.png">
 
 #### Keywords: protractor, cucumber, html, reporter, convertor, from json, to html, cucumber-reporter, html-reporter.
  
