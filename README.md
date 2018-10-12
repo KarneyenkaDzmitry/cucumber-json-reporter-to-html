@@ -25,8 +25,8 @@ There application has only one dependency: "lodash": "^4.17.10"
  ### reporter.create(Path-to-cucumber-report.json, path-to-store-report.html, title-of-report(default: 'There might be your ads'), description(default: no description));
  
  #### Example:
- `const reporter = require('cucumber-json-reporter-to-html');
- reporter.create('./test/report.json', './test/report.html', 'The Best title of the world', 'DESCRIPTION');`
+ `const reporter = require('cucumber-json-reporter-to-html');`
+ `reporter.create('./test/report.json', './test/report.html', 'The Best title of the world', 'DESCRIPTION');`
 
 ## Structure 
 ### Folders:
@@ -51,18 +51,18 @@ There application has only one dependency: "lodash": "^4.17.10"
 ## N.B.
 ### How store and use too long string in json file 
 The isiest way is to store the long string as an array:<br>
-`"long string" : [
-            "<body><header>",
-            "<nav class=\"navbar navbar-default navbar-static-top\" role=\"navigation\">",
-            "<div class=\"container\">",
-            "<div class=\"navbar-brand\">title</div>",
-            "<div class=\"navbar-header label-container\"><p>"
-]`<br>
+`{"long string" : [`<br>
+            `"<body><header>",`<br>
+            `"<nav class=\"navbar navbar-default navbar-static-top\" role=\"navigation\">",`<br>
+            `"<div class=\"container\">",`<br>
+            `"<div class=\"navbar-brand\">title</div>",`<br>
+            `"<div class=\"navbar-header label-container\"><p>"`<br>
+`]`<br>
 And then use the method join() in js-code:<br>
 `json["long string].join('');`<br>
 Don't forget that the method takes delemiter as an input value, so you can send different delemiters.<br>
-E.g.:
-`json["long string].join('\n');`
+E.g.:<br>
+`json["long string].join('\n');`<br>
 `json["long string].join(',');`<br>
-and so on.
+and so on.<br>
 [see documentation](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/join)<br>
