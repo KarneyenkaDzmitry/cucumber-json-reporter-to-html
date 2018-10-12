@@ -50,7 +50,7 @@ There application has only one dependency: "lodash": "^4.17.10"
 
 ## N.B.
 ### How store and use too long string in json file 
-The isiest way is to store the long string as an array:<br>
+The easiest way is to store the long string as an array:<br>
 `{"long string" : [`<br>
             `"<body><header>",`<br>
             `"<nav class=\"navbar navbar-default navbar-static-top\" role=\"navigation\">",`<br>
@@ -66,3 +66,23 @@ E.g.:<br>
 `json["long string].join(',');`<br>
 and so on.<br>
 [see documentation](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/join)<br>
+
+### How replace substring into your string 
+Use for this reason method String.prototype.replace(regex or string, your string)<br>
+Don't forget:
+1. The method takes string or Regex.prototype as the first parameter<br>
+and your string as the second parameter.<br>
+2. You can use flags for regex (g-global, i-ignore case):
+E.g. via regex:<br>
+`const  p = 'The quick brown fox jumped over the lazy dog. If the dog reacted, was it really lazy?';`<br>
+`console.log(p.replace(/dog/gi, 'ferret'));`<br>
+`//expected output: "The quick brown fox jumped over the lazy ferret. If the ferret reacted, was it really lazy?"`<br>
+E.g. via variable and create new RegEx object:<br> 
+`const  p = 'The quick brown fox jumped over the lazy dog. If the dog reacted, was it really lazy?';`<br>
+`const variable = 'dog'`<br>
+`const regex = new RegEx(variable, 'gi')`<br>
+`console.log(p.replace(regex, 'ferret'));`<br>
+`//expected output: "The quick brown fox jumped over the lazy ferret. If the ferret reacted, was it really lazy?"`<br>
+and so on.<br>
+[see documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace)<br>
+[see documentation(RegEx)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)<br>
