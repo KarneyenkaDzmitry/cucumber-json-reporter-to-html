@@ -3,7 +3,6 @@
 ### Description 
 The application helps to convert cucumber.json reporter into pretty html view.<br>
 A html reporter will have anougth information for analize tests<br>
-<img weight = "700" src="https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/Screenshot-description.png">
 
 #### Keywords: protractor, cucumber, html, reporter, convertor, from json, to html, cucumber-reporter, html-reporter.
  
@@ -45,6 +44,11 @@ There application has only one dependency: "lodash": "^4.17.10"
 - [Screenshot-description.png](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/Screenshot-description.png) - png file with descriptions of the options a reporter;
 - [LICENSE](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/LICENSE) - license MIT;
 - [README.md](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/README.md) - readme file with special information about the application and git-syntacs. 
+
+## Screenshot-description
+<br>
+<img weight = "100%" src="https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/Screenshot-description.png">
+<br>
 
 ### Author
 #### Dzmitry_Karneyenka, Republic of Belarus, Minsk
