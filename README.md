@@ -21,7 +21,7 @@ There application has only one dependency: "lodash": "^4.17.10"
 
 ## Usage:
 
- ### const reporter = require('cucumber-json-reporter-to-html');
+ ### const reporter = require('cucumber-json-reporter-to-html');<br>
  ### reporter.create(Path-to-cucumber-report.json, path-to-store-report.html, title-of-report(default: 'There might be your ads'), description(default: no description));
  
  #### Example:
@@ -31,29 +31,38 @@ There application has only one dependency: "lodash": "^4.17.10"
 ## Structure 
 ### Folders:
 
-- [css]() - there are all styles that needed for making html report prettier;
-- [node_modules]() - will be created after [npm install] command. There will be stored all additional modules;
-- [data]() - containes data for creating html page;
-- [utils]() - contains main files with methods that create a report.
+- [css](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/tree/master/css) - there are all styles that needed for making html report prettier;
+- [data](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/tree/master/data) - containes data for creating html page;
+- [utils](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/tree/master/utils) - contains main files with methods that create a report.
 
 ### Files in root:
 
-- [index.js]() - main file in which you can find our Calculator class;
-- [.eslintrc.js]() - all rulles for [eslint] are placed there;
-- [.gitignore]() -  all folders and files that should not be indexed by [git] are listed here;
-- [package.json]() - includes all data for [npm];
-- [Screenshot-description.png]() - png file with descriptions of the options a reporter;
-- [LICENSE]() - license MIT;
-- [README.md]() - readme file with special information about the application and git-syntacs. 
+- [index.js](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/index.js) - main file in which you can find our Calculator class;
+- [.eslintrc.js](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/.eslintrc.js) - all rulles for [eslint] are placed there;
+- [.gitignore](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/.gitignore) -  all folders and files that should not be indexed by [git] are listed here;
+- [package.json](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/package.json) - includes all data for [npm];
+- [Screenshot-description.png](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/Screenshot-description.png) - png file with descriptions of the options a reporter;
+- [LICENSE](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/LICENSE) - license MIT;
+- [README.md](https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/README.md) - readme file with special information about the application and git-syntacs. 
 
 ### Author
 #### Dzmitry_Karneyenka, Republic of Belarus, Minsk
 
 ## N.B.
-### chai method throw
-How to make checks for Errors?<br>
-1. Create new function that will include tested method that have to throw an Error with data.<br>
-`e.g. const actualResult = () => calculator.add(data);`<br><br>
-2. Send it into check's method. further steps it does itself.It makes listener, runs method and catches an Error.<br>
-`e.g. chai.expect(actualResult).to.throw(TypeError);`<br>
-[see documentation](https://www.chaijs.com/api/bdd/#method_throw)<br>
+### How store and use too long string in json file 
+The isiest way is to store the long string as an array:<br>
+`"long string" : [
+            "<body><header>",
+            "<nav class=\"navbar navbar-default navbar-static-top\" role=\"navigation\">",
+            "<div class=\"container\">",
+            "<div class=\"navbar-brand\">title</div>",
+            "<div class=\"navbar-header label-container\"><p>"
+]`<br>
+And then use the method join() in js-code:<br>
+`json["long string].join('');`<br>
+Don't forget that the method takes delemiter as an input value, so you can send different delemiters.<br>
+E.g.:
+`json["long string].join('\n');`
+`json["long string].join(',');`<br>
+and so on.
+[see documentation](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/join)<br>
