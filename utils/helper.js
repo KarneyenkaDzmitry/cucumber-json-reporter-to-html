@@ -5,47 +5,76 @@ const path = require('path');
 const _ = require('lodash');
 const content = require('../data/content.data.json');
 
-function replacer(string, object, flags) {
+/**
+ * Replace substrings from object in origin string
+ * @param  {string} origin A string where need to replace substrings
+ * @param  {Object} object An object with values key - value (value-string is a string for putting instead of key-string)
+ * @param  {string} flags A string with flags.(E.g. g - global, i - ignore case etc.)
+ * @return {string} Returns modifined string
+ */
+function replacer(origin, object, flags) {
     Object.keys(object).forEach(key => {
         const regex = new RegExp(key, flags)
-        string = string.replace(regex, object[key]);
+        origin = origin.replace(regex, object[key]);
     });
-    return string;
+    return origin;
 }
 
+
 const calculateDuration = function (duration) {
-    var oneNanoSecond = 1000000000;
-    var oneMinute = 60 * oneNanoSecond;
+    const oneNanoSecond = 1000000000;
+    const oneMinute = 60 * oneNanoSecond;
     duration = parseInt(duration);
     function format(min, sec) {
         sec = sec + ' s';
         return min > 0 ? min + ' m ' + sec : sec;
     }
     if (!isNaN(duration)) {
-        var min = _.floor(duration / oneMinute);
-        var sec = _.round((duration % oneMinute) / oneNanoSecond);
+        let min = _.floor(duration / oneMinute);
+        let sec = _.round((duration % oneMinute) / oneNanoSecond);
         return format(min, sec);
     }
 };
 
+/** Getter for [steps] css-styles that returns name of class for css styles as a string
+ * @param  {Object} step An object with properties
+ * @returns {string} string as a name of class for scc styles
+ */
 function getStepStatus(step) {
-    let cssClass;
     switch (step.result.status) {
-        case 'passed':
-            cssClass = 'label-success';
-            break;
-        case 'failed':
-            cssClass = 'label-danger';
-            break;
-        case 'skipped':
-            cssClass = 'label-warning';
-            break;
-        default: cssClass = 'label-warning';
-            break;
+        case 'passed': return 'label-success';
+        case 'failed': return 'label-danger';
+        case 'skipped': return 'label-warning';
+        default: return 'label-warning';
     }
-    return cssClass;
 }
 
+/** Getter for [features] css-styles that returns name of class for css styles as a string
+ * @param  {Array} elements An array with objects
+ * @returns {string} string as a name of class for scc styles
+ */
+function getFeatureStatus(elements) {
+    elements = elements.filter((element) => {
+        if (getScenarioStatus(element.steps) === 'label-danger') { return element; }
+    });
+    return elements.length > 0 ? 'label-danger' : 'label-success';
+}
+
+/** Getter for [scenarios] css-styles that returns name of class for css styles as a string
+ * @param  {Array} steps An array of objects with steps
+ * @returns {string} string as a name of class for scc styles
+ */
+function getScenarioStatus(steps) {
+    steps = steps.filter((step) => {
+        if (step.result.status === 'failed') return step;
+    });
+    return steps.length > 0 ? 'label-danger' : 'label-success';
+}
+
+/** Getter for [Features] - time
+ * @param  {Array} scenarios An array of scenarios 
+ * @returns {Number} An amount of time
+ */
 function getFeatureTime(scenarios) {
     let result = 0;
     scenarios.forEach(scenario => {
@@ -54,6 +83,10 @@ function getFeatureTime(scenarios) {
     return result;
 }
 
+/** Getter for [Scenarios] - time
+ * @param  {Array} steps An array of steps 
+ * @returns {Number} An amount of time
+ */
 function getScenarioTime(steps) {
     let result = 0;
     steps.forEach((step) => {
@@ -64,32 +97,32 @@ function getScenarioTime(steps) {
     return result;
 }
 
-function getFeatureStatus(elements) {
-    elements = elements.filter((element) => {
-        if (getScenarioStatus(element.steps) === 'label-danger') { return element; }
-    });
-    return elements.length > 0 ? 'label-danger' : 'label-success';
-}
 
-function getScenarioStatus(steps) {
-    steps = steps.filter((step) => {
-        if (step.result.status === 'failed') return step;
-    });
-    return steps.length > 0 ? 'label-danger' : 'label-success';
-}
-
+/** The method fills the template according to the [marker] value
+ * @param  {string} marker - A string. Allowed values: [step], [scenario], [feature];
+ * @param  {string} status - A string with css-class for css styles;0
+ * @param  {string} name - A string with name of step, scenario, feature;
+ * @param  {number or string} time - A duration of current step, scenario, feature;
+ * @param  {string} Id - A string with ID for making dropdawns;
+ * @param  {string} scenarios - A String with list of scenarios or steps;
+ * @returns {string} A string as an needed snippet of html;
+ */
 function fillTemplate(marker, status, name, time, Id, scenarios) {
     const marks = {};
     marks[`#${marker}Status`] = status;
-    marks[`#${marker}Name`] = name; 
+    marks[`#${marker}Name`] = name;
     marks[`#${marker}Time`] = time;
     marks[`#${marker}ID`] = Id;
-    marks[`#${marker}Key`] =  Id;
+    marks[`#${marker}Key`] = Id;
     marks['#scenariosList'] = scenarios;
     marks['#allSteps'] = scenarios;
     return replacer(content[marker].join('\n'), marks, 'gi');
 }
 
+/** Getter thar returns statistics of steps
+ * @param  {Object} reportJson An Object with data from cucumber report json file
+ * @returns {object} with statistic results of steps;
+ */
 function getResults(reportJson) {
     const statistics = {};
     const statuses = ['passed', 'failed', 'skipped'];
@@ -107,7 +140,13 @@ function getResults(reportJson) {
     return statistics;
 }
 
-function getStepsList(data, reportPath) {
+/**
+ * Getter for [Steps]. Returns a string as a snippet of html with results for reporter
+ * @param  {Array} data An array of steps data from cucumber.json data
+ * @param  {String} reportPath A string with path to place where will be stores the future generated html report
+ * @returns {String} a string as a snippet of html with results for reporter
+ */
+ function getStepsList(data, reportPath) {
     let failedStep = {};
     let steps = [];
     data.forEach(step => {
@@ -124,17 +163,21 @@ function getStepsList(data, reportPath) {
         } else {
             if (step.embeddings !== undefined) {
                 let image = new Buffer.from(step.embeddings[0].data, 'base64');
-                fs.existsSync(path.resolve(path.dirname(reportPath))+'/screenshots') || fs.mkdirSync(path.resolve(path.dirname(reportPath))+'/screenshots');
+                fs.existsSync(path.resolve(path.dirname(reportPath)) + '/screenshots') || fs.mkdirSync(path.resolve(path.dirname(reportPath)) + '/screenshots');
                 let screenshotPath = path.resolve(path.dirname(reportPath)) + '/screenshots/' + failedStep.name.replace(/\s/g, '') + '.png';
                 fs.writeFileSync(screenshotPath, image, 'base64');
-                steps[failedStep.index]=steps[failedStep.index].replace('<!---->', `<a href=\"${screenshotPath}\" alt=\"${failedStep.name}\" title=\"${failedStep.name}\" target=\"_blank\">screen</a>`);
+                steps[failedStep.index] = steps[failedStep.index].replace('<!---->', `<a href=\"${screenshotPath}\" alt=\"${failedStep.name}\" title=\"${failedStep.name}\" target=\"_blank\">screen</a>`);
             }
         }
-
     });
     return steps.join('\n');
 }
 
+/** Getter for [Scenarios]. Returns a string as a snippet of html with results for reporter
+ * @param  {Array} data An array of scenarios data from cucumber.json data
+ * @param  {String} reportPath A string with path to place where will be stores the future generated html report
+ * @returns {String} a string as a snippet of html with results for reporter
+ */
 function getScenariosList(data, listName, reportPath) {
     let scenarios = [];
     data.forEach((scenario, index) => {
@@ -148,9 +191,14 @@ function getScenariosList(data, listName, reportPath) {
     return scenarios.join('\n');
 }
 
-function getFeaturesLists(jsonData, reportPath) {
+/** Getter for [Features]. Returns a string as a snippet of html with results for reporter
+ * @param  {Array} data An array of features data from cucumber.json data
+ * @param  {String} reportPath A string with path to place where will be stores the future generated html report
+ * @returns {String} a string as a snippet of html with results for reporter
+ */
+function getFeaturesLists(data, reportPath) {
     const features = { all: [], passed: [], failed: [] };
-    jsonData.forEach((feature) => {
+    data.forEach((feature) => {
         const featureStatus = getFeatureStatus(feature.elements);
         const featureName = feature.name;
         const featureTime = calculateDuration(getFeatureTime(feature.elements));
