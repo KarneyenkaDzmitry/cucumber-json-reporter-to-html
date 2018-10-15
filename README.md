@@ -47,7 +47,7 @@ There application has only one dependency: "lodash": "^4.17.10"
 
 ## Screenshot-description
 <br>
-<img weight = "100%" src="https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/Screenshot-description.png">
+<img weight = "1000" src="https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html/blob/master/Screenshot-description.png">
 <br>
 
 ### Author
