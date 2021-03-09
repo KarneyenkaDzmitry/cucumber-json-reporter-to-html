@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/KarneyenkaDzmitry/cucumber-json-reporter-to-html#readme",
   "dependencies": {
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.21"
   }
 }
